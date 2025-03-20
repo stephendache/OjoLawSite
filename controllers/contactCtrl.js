@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { validationResult } = require('express-validator');
 const Contact = require('../models/Contact');
 const transporter = require('../config/mailConfig');
@@ -9,22 +8,9 @@ exports.submitContactForm = async (req, res) => {
         return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    const { fullname, email, phone, message, "g-recaptcha-response": recaptchaToken } = req.body;
+    const { fullname, email, phone, message } = req.body; // Removed "g-recaptcha-response"
 
     try {
-        // Verify reCAPTCHA with Google
-        const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
-        const recaptchaResponse = await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
-            params: {
-                secret: recaptchaSecret,
-                response: recaptchaToken,
-            }
-        });
-
-        if (!recaptchaResponse.data.success) {
-            return res.status(400).json({ error: "reCAPTCHA verification failed. Please try again." });
-        }
-
         // Store the message in MySQL
         await Contact.saveMessage(fullname, email, phone, message);
 
