@@ -17,7 +17,7 @@ exports.submitContactForm = async (req, res) => {
         // Define the email content
         const mailOptions = {
             from: process.env.MAIL_USER,
-            to: process.env.MAIL_USER, // Send to your admin email
+            to: process.env.ADMIN_EMAIL, // Send to your admin email
             subject: `New Contact Message from ${fullname}`,
             text: `Name: ${fullname}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`,
             html: `
