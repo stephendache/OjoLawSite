@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic Title & Description -->
+    <title><%= pageTitle || "The Ojo Law Center, LLC - U.S. Immigration Lawyers" %></title>
+    <meta name="description" content="<%= pageDescription || 'Expert U.S. immigration legal services for visas, green cards, and citizenship. Schedule a consultation today.' %>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<%= pageTitle || 'The Ojo Law Center, LLC' %>">
+    <meta property="og:description" content="<%= pageDescription || 'Expert U.S. immigration legal services.' %>">
+    <meta property="og:image" content="<%= ogImage || '/images/og-default.jpg' %>">
+    <meta property="og:url" content="<%= ogUrl || 'https://www.ojolaw.com' %>">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= pageTitle || 'The Ojo Law Center, LLC' %>">
+    <meta name="twitter:description" content="<%= pageDescription || 'Expert U.S. immigration legal services.' %>">
+    <meta name="keywords" content="immigration lawyer, U.S. visa, green card, legal help">
+
+    <meta name="twitter:image" content="<%= twitterImage || '/images/twitter-default.jpg' %>">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= canonicalUrl || 'https://www.ojolaw.com' %>">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/logo/favicon.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LegalService",
+      "name": "The Ojo Law Center, LLC",
+      "url": "https://www.ojolaw.com",
+      "telephone": "+1 (240) 486-1996",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "13201 Northwest Freeway, Suite 800",
+        "addressLocality": "Houston",
+        "addressRegion": "TX",
+        "postalCode": "77040",
+        "addressCountry": "US"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What immigration services do you offer?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We provide assistance with visas, green cards, citizenship, waivers, and investor immigration."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I book a consultation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can book a consultation through our online scheduling system or call us at +1 (240) 486-1996."
+            }
+          }
+        ]
+      }
+      </script>
+      
+    <!-- Stylesheets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sofia&amp;display=swap" rel="stylesheet">
+    <!-- CSS here -->
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/animate.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/odometer.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/swiper.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/vendor/fontawesome-pro.css"> 
+    <link rel="stylesheet" href="assets/css/vendor/spacing.css">
+    <link rel="stylesheet" href="assets/css/vendor/custom-font.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+
+
+<%- include ('../partials/nav') %>

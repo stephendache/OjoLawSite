@@ -1,0 +1,57 @@
+{
+  "name": "ojo-law-center",
+  "version": "1.0.0",
+  "description": "A professional U.S. immigration law firm website offering expert legal services.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephendache/ojolawllc.git"
+  },
+  "keywords": [
+    "law",
+    "immigration",
+    "legal",
+    "services",
+    "visa",
+    "green",
+    "card",
+    "attorney",
+    "US",
+    "immigration"
+  ],
+  "author": "The Ojo Law Center, LLC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stephendache/ojolawllc/issues"
+  },
+  "homepage": "https://github.com/stephendache/ojolawllc#readme",
+  "dependencies": {
+    "axios": "^1.8.1",
+    "body-parser": "^1.20.3",
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.12.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
+    "path": "^0.12.7",
+    "sitemap": "^8.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.21.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
+  }
+}

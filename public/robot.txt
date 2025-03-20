@@ -1,0 +1,19 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /login/
+Disallow: /register/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /search?q=
+
+# Allow important pages
+Allow: /
+
+# Prevent crawling of unnecessary files
+Disallow: /public/uploads/
+Disallow: /assets/js/
+Disallow: /assets/css/
+
+# Sitemap for better SEO indexing
+Sitemap: https://www.ojolaw.com/sitemap.xml
