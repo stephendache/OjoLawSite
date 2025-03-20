@@ -7,7 +7,6 @@ const generateSitemap = require('./utils/sitemapGenerator');
 const bodyParser = require("body-parser");
 const session = require('express-session');
 const helmet = require('helmet');
-const xssClean = require('xss-clean');
 // const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const mysql = require('./config/db');
@@ -28,7 +27,6 @@ const app = express();
 
 // Security Middleware
 app.use(helmet()); // Security headers
-app.use(xssClean()); // Prevent XSS attacks
 app.use(cors()); // Enable cross-origin requests
 
 // // Rate Limiting (Limits requests to 5 per minute per IP)
