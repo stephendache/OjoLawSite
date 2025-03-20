@@ -29,12 +29,6 @@ const app = express();
 app.use(helmet()); // Security headers
 app.use(cors()); // Enable cross-origin requests
 
-// // Rate Limiting (Limits requests to 5 per minute per IP)
-// const limiter = rateLimit({
-//     windowMs: 1 * 600 * 1000, // 1 minute
-//     max: 10, // Limit each IP to 10 requests per minute
-//     message: "Too many requests, please try again later."
-// });
 // app.use("/contact", limiter);
 
 // Apply Security Middleware

@@ -1,5 +1,5 @@
-const axios = require('axios');  // Import Axios for API requests
-const { validationResult } = require('express-validator'); 
+const axios = require('axios');
+const { validationResult } = require('express-validator');
 const Contact = require('../models/Contact');
 const transporter = require('../config/mailConfig');
 
@@ -14,9 +14,13 @@ exports.submitContactForm = async (req, res) => {
     try {
         // Verify reCAPTCHA with Google
         const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
-        const recaptchaUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaToken}`;
-        const recaptchaResponse = await axios.post(recaptchaUrl);
-        
+        const recaptchaResponse = await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
+            params: {
+                secret: recaptchaSecret,
+                response: recaptchaToken,
+            }
+        });
+
         if (!recaptchaResponse.data.success) {
             return res.status(400).json({ error: "reCAPTCHA verification failed. Please try again." });
         }
@@ -53,11 +57,10 @@ exports.submitContactForm = async (req, res) => {
 
         return res.status(200).json({ success: "Your message has been sent successfully!" });
     } catch (error) {
-        console.error(error);
+        console.error('Error during form submission:', error);
         return res.status(500).json({ error: "Internal server error. Please try again later." });
     }
 };
-
 
 exports.renderContactPage = (req, res) => {
     res.render("pages/contact", {
