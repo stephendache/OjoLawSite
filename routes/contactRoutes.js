@@ -1,9 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const contactController = require("../controllers/contactCtrl");
+const express = require('express');
+const { submitContactForm } = require('../controllers/contactCtrl');
+const { validateContactForm } = require('../middlewares/contactValidator');
 
-// Handle Form Submission
-router.post("/", contactController.submitForm);
-router.post("/", contactController.contactPage);
+const router = express.Router();
+
+// Contact Form Route (POST)
+router.post('/', validateContactForm, submitContactForm);
 
 module.exports = router;

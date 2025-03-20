@@ -1,35 +1,57 @@
-const bodyParser = require("body-parser");
 require('dotenv').config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
-const helmet = require('helmet');
-const compression = require('compression');
-const cors = require('cors');
 const cron = require('node-cron');
 const generateSitemap = require('./utils/sitemapGenerator');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
+const bodyParser = require("body-parser");
+const session = require('express-session');
+const helmet = require('helmet');
+const xssClean = require('xss-clean');
+// const rateLimit = require('express-rate-limit');
+const cors = require('cors');
+const mysql = require('./config/db');
+
+// Import security settings & middleware
+const securityMiddleware = require('./config/security');
+const notFoundHandler = require('./middlewares/notFoundHandler');
+const errorHandler = require('./middlewares/errorHandler');
+
+// Import routes
+const indexRoutes = require("./routes/indexRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const tawkRoutes = require("./routes/tawkapi");
 
 // Create an instance of Express
 const app = express();
 
-// Middleware
-app.use(helmet()); // Security Headers
-app.use(compression()); // Gzip Compression
-app.use(cors()); // Enable CORS
-app.use(morgan('combined')); // Logging HTTP requests
+// Security Middleware
+app.use(helmet()); // Security headers
+app.use(xssClean()); // Prevent XSS attacks
+app.use(cors()); // Enable cross-origin requests
 
-// Rate Limiting (prevents abuse & improves security)
+// // Rate Limiting (Limits requests to 5 per minute per IP)
 // const limiter = rateLimit({
-//   windowMs: 120 * 60 * 1000, // 2 hour
-//   max: 100, // Limit each IP to 100 requests per window
-//   message: "Too many requests from this IP, please try again later."
+//     windowMs: 1 * 600 * 1000, // 1 minute
+//     max: 10, // Limit each IP to 10 requests per minute
+//     message: "Too many requests, please try again later."
 // });
-// app.use(limiter);
+// app.use("/contact", limiter);
+
+// Apply Security Middleware
+securityMiddleware(app);
+
+// Session Configuration (for Admin Login)
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, httpOnly: true }
+}));
 
 // Set the port from environment variables or default to 3000
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // Configure EJS as the template engine
 app.set("view engine", "ejs");
@@ -37,59 +59,35 @@ app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
-// Middleware to serve static files from the "public" directory
+// Middleware to serve static files
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/robots.txt', express.static(path.join(__dirname, 'public', 'robots.txt')));
 
 // Generate sitemap on startup
 generateSitemap();
-
-// Schedule sitemap update every 24 hours
 cron.schedule('0 0 * * *', () => {
     console.log('⏳ Updating sitemap...');
     generateSitemap();
 });
 
-// Serve the sitemap file
-app.use('/sitemap.xml', express.static(path.join(__dirname, 'public', 'sitemap.xml')));
-
+// Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
-// Routes
-app.use("/", require("./routes/indexRoutes"));
-app.use("/", require("./routes/contactRoutes"));
-app.use("/get-tawk-id", require("./routes/tawkapi"));
+// Load Routes
+app.use("/", indexRoutes);
+app.use("/contact", contactRoutes);
+app.use("/get-tawk-id", tawkRoutes);
+app.use("/admin", adminRoutes);
+
 
 // Handle 404 errors (Page Not Found)
-app.use((req, res) => {
-  res.status(404).render("pages/404", {
-    pageTitle: "Error | The Ojo Law Center, LLC",
-    pageDescription: "Oops! Something went wrong. Please try again later.",
-    ogImage: "/images/og-default.jpg",
-    ogUrl: "https://www.ojolaw.com/error",
-    twitterImage: "/images/twitter-default.jpg",
-    canonicalUrl: "https://www.ojolaw.com/error",
-    status: err.status || 500,
-    message: err.message || "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
-  });
-});
+app.use(notFoundHandler);
 
 // Centralized error-handling middleware
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).render("pages/404", {
-      pageTitle: "Error | The Ojo Law Center, LLC",
-      pageDescription: "Oops! Something went wrong. Please try again later.",
-      ogImage: "/images/og-default.jpg",
-      ogUrl: "https://www.ojolaw.com/error",
-      twitterImage: "/images/twitter-default.jpg",
-      canonicalUrl: "https://www.ojolaw.com/error",
-      status: err.status || 500,
-      message: err.message || "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
-  });
-});
+app.use(errorHandler);
 
-// Start the server and listen on the specified port
+// Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

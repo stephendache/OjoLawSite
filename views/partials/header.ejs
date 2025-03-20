@@ -13,7 +13,7 @@
     <meta property="og:title" content="<%= pageTitle || 'The Ojo Law Center, LLC' %>">
     <meta property="og:description" content="<%= pageDescription || 'Expert U.S. immigration legal services.' %>">
     <meta property="og:image" content="<%= ogImage || '/images/og-default.jpg' %>">
-    <meta property="og:url" content="<%= ogUrl || 'https://www.ojolaw.com' %>">
+    <meta property="og:url" content="<%= typeof ogUrl !== 'undefined' ? ogUrl : 'https://www.ojolaw.com' %>">
     
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">

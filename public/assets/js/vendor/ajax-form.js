@@ -1,50 +1,55 @@
-$(function() {
+$(document).ready(function () {
+    // Get the form
+    var form = $('#contact-us__form');
 
-	// Get the form.
-	var form = $('#contact-form');
+    // Ensure event listener is attached only once
+    form.off('submit').on('submit', function (e) {
+        // Prevent default form submission
+        e.preventDefault();
 
-	// Get the messages div.
-	var formMessages = $('.ajax-response');
+        // Disable submit button to prevent multiple submissions
+        $('.contact-btn').prop('disabled', true).text('Sending...');
 
-	// Set up an event listener for the contact form.
-	$(form).submit(function(e) {
-		// Stop the browser from submitting the form.
-		e.preventDefault();
+        // Clear previous messages
+        $('.ajax-response').removeClass('error success').html('');
 
-		// Serialize the form data.
-		var formData = $(form).serialize();
+        // Serialize the form data
+        var formData = form.serialize();
 
-		// Submit the form using AJAX.
-		$.ajax({
-			type: 'POST',
-			url: $(form).attr('action'),
-			data: formData
-		})
-		.done(function(response) {
-			// Make sure that the formMessages div has the 'success' class.
-			$(formMessages).removeClass('error');
-			$(formMessages).addClass('success');
+        // Submit the form using AJAX
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: formData,
+            dataType: 'json',  // Expect JSON response
+            success: function (response) {
+                if (response.success) {
+                    // Show success message
+                    $('.ajax-response').removeClass('error').addClass('success').html(response.success);
 
-			// Set the message text.
-			$(formMessages).html(response);
+                    // Clear the form fields
+                    form[0].reset();
 
-			// Clear the form.
-			$('#contact-form input,#contact-form message').val('');
-		})
-		.fail(function(data) {
-			// Make sure that the formMessages div has the 'error' class.
-			$(formMessages).removeClass('success');
-			$(formMessages).addClass('error');
+                    // Reset the button text after 2 seconds
+                    setTimeout(function () {
+                        $('.contact-btn').prop('disabled', false).text('Send Message');
+                        $('.ajax-response').fadeOut(300);
+                    }, 3000);
+                }
+            },
+            error: function (xhr) {
+                // Show error message
+                $('.ajax-response').removeClass('success').addClass('error');
 
-			// Set the message text.
-			if (data.responseText !== '') {
-				console.log("hi");
-				console.log(data.responseText);
-				$(formMessages).html(data.responseText);
-			} else {
-				$(formMessages).html('Oops! An error occured and your message could not be sent.');
-			}
-		});
-	});
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    $('.ajax-response').html(xhr.responseJSON.error);
+                } else {
+                    $('.ajax-response').html('Oops! An error occurred, and your message could not be sent.');
+                }
 
+                // Re-enable the button
+                $('.contact-btn').prop('disabled', false).text('Send Message');
+            }
+        });
+    });
 });
