@@ -568,7 +568,7 @@ textarea {
 
 ::selection {
   background: var(--rr-common-black);
-  color: var(--rr-common-white);
+  /* color: var(--rr-common-white); */
   text-shadow: none;
 }
 
